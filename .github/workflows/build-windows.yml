@@ -2,7 +2,7 @@ name: Build & Release Windows executable
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -14,7 +14,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: "3.12"
 
       - name: Install deps
         run: |
@@ -31,14 +31,14 @@ jobs:
 
       - name: Create GitHub release
         id: create_release
-        uses: softprops/action-gh-release@v1
+        uses: actions/create-release@v1
         with:
           tag_name: v${{ github.run_number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload exe to release
-        uses: softprops/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: impositor-a5\\dist\\impositor-a5.exe
