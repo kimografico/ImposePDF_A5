@@ -46,3 +46,5 @@ jobs:
           asset_path: dist\\impositor-a5.exe
           asset_name: impositor-a5.exe
           asset_content_type: application/octet-stream
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
