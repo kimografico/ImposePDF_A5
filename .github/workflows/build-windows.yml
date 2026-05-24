@@ -1,0 +1,45 @@
+name: Build & Release Windows executable
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with: python-version: '3.12'
+
+      - name: Install deps
+        run: |
+          python -m venv .venv
+          .\.venv\Scripts\Activate.ps1
+          python -m pip install --upgrade pip
+          pip install -r impositor-a5/requirements.txt
+
+      - name: Build exe
+        run: |
+          .\.venv\Scripts\Activate.ps1
+          cd impositor-a5
+          pyinstaller --onefile --windowed --icon=assets\\icon.ico --name=impositor-a5 main.py
+
+      - name: Create GitHub release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload exe to release
+        uses: softprops/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: impositor-a5\\dist\\impositor-a5.exe
+          asset_name: impositor-a5.exe
+          asset_content_type: application/octet-stream
