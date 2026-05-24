@@ -21,12 +21,11 @@ jobs:
           python -m venv .venv
           .\.venv\Scripts\Activate.ps1
           python -m pip install --upgrade pip
-          pip install -r impositor-a5/requirements.txt
+          pip install -r requirements.txt
 
       - name: Build exe
         run: |
           .\.venv\Scripts\Activate.ps1
-          cd impositor-a5
           pyinstaller --onefile --windowed --icon=assets\\icon.ico --name=impositor-a5 main.py
 
       - name: Create GitHub release
@@ -41,6 +40,6 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: impositor-a5\\dist\\impositor-a5.exe
+          asset_path: dist\\impositor-a5.exe
           asset_name: impositor-a5.exe
           asset_content_type: application/octet-stream
