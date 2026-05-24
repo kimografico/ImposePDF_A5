@@ -108,6 +108,21 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(central)
         layout.setContentsMargins(16, 12, 16, 12)
         layout.setSpacing(10)
+        # --- Encabezado: título + info ---
+        header = QHBoxLayout()
+        self._titulo = QLabel("Imposición de PDF en A5 a dos caras")
+        self._titulo.setStyleSheet("font-size:16px; font-weight:bold;")
+        self._titulo.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+
+        self._btn_info = QPushButton("ⓘ")
+        self._btn_info.setToolTip("Cómo usar esta aplicación")
+        self._btn_info.setFixedSize(28, 28)
+        self._btn_info.clicked.connect(self._mostrar_ayuda)
+
+        header.addWidget(self._titulo)
+        header.addStretch()
+        header.addWidget(self._btn_info)
+        layout.addLayout(header)
 
         # --- Selección de archivo ---
         fila_archivo = QHBoxLayout()
@@ -155,6 +170,12 @@ class MainWindow(QMainWindow):
         layout.addWidget(self._estado)
 
         layout.addStretch()
+
+        # --- Texto legal al pie ---
+        self._legal = QLabel("Kimográfico, Mayo 2026, todos los derechos reservados")
+        self._legal.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._legal.setStyleSheet("color: gray; font-size:10px;")
+        layout.addWidget(self._legal)
 
     def _construir_menu(self):
         barra = QMenuBar(self)
